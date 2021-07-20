@@ -39,22 +39,25 @@ app.get('/', (req, res) => {
     
     
     
+    console.log("req.query.mobileno  = " + req.query.mobileno);
+    console.log("req.query.message  = " + req.query.message);
+    console.log("req.query.token  = " + req.query.token);
 
     const client = require('twilio')(
         'AC35c18346fa0a86db122669f9a1e4b8fe',
-        '05b2d2ae85412de6860bded7c3808083' 
+        req.query.token 
       );
       
       client.messages.create({
         from: '+14086062860',
-        to: '+919840391870',
-        body: "You just sent an SMS from Node.js using Twilioooooo!"
+        to: '+' + req.query.mobileno,
+        body: req.query.message
       }).then(
                     function (data) { 
                         console.log("data.accountSid  = " + data.accountSid);
                         console.log("data.body = " + data.body);                        
                         
-                          res.end(JSON.stringify({ MessageID: data.messagingServiceSid }));
+                          res.end(JSON.stringify({ AccountSId: data.accountSid}));
                     }).catch(
                         function (err) {
                             res.end(JSON.stringify({ Error: err }));
@@ -62,4 +65,4 @@ app.get('/', (req, res) => {
         
 
                     }); 
-app.listen(process.env.PORT || 5000, () => console.log('SMS Service Listening on PORT 3000'))
+app.listen(process.env.PORT || 5000, () => console.log('SMS Service Listening on PORT 5000'))
